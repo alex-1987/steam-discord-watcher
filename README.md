@@ -1,127 +1,56 @@
-# 🎮 Steam Discord Watcher Bot
+# Steam Discord Dynamic Watcher
 
-Ein robuster, asynchroner Python-Bot, der erkennt, wenn ein Steam-Nutzer ein Spiel startet, und das in einem Discord-Channel postet.
+Ein Discord-Bot, der automatisch überprüft, welche Discord-Nutzer aktuell ein Steam-Spiel spielen – basierend auf verknüpften Steam-IDs.
 
----
+## 🔧 Setup
 
-## 📦 Projektstruktur
-
-```bash
-steam-discord-watcher/
-├── bot.py
-├── Dockerfile
-├── docker-compose.yml
-├── requirements.txt
-├── .env.example
-├── .gitignore
-└── README.md
-```
-
----
-
-## 🚀 Features
-
-- **Asynchrone** Steam API-Abfragen mit `aiohttp`
-- **Automatisches Laden** von Umgebungsvariablen via `python-dotenv`
-- **Graceful Error-Handling** & **Logging** via `logging`
-- **Env-Validation**: Verhindert fehlende Konfiguration
-- **Docker- & Docker Compose-ready**
-
----
-
-## 🛠 Voraussetzungen
-
-- Docker & Docker Compose installiert
-- Ein Steam Web API Key (https://steamcommunity.com/dev/apikey)
-- Steam64-ID des zu überwachenden Nutzers
-- Discord Bot Token mit Schreibrechten im Channel
-
----
-
-## 🔧 Installation
-
-1. Repository klonen:
-
+1. **Repo klonen & in das Verzeichnis wechseln**  
    ```bash
-   git clone https://github.com/dein-user/steam-discord-watcher.git
-   cd steam-discord-watcher
+   git clone <repo-url>
+   cd steam-discord-dynamic-watcher
    ```
 
-2. Beispiel-Env kopieren und anpassen:
-
+2. **`.env` Datei erstellen**  
+   Kopiere die `.env.example`:
    ```bash
    cp .env.example .env
-   # .env mit deinen Daten befüllen
    ```
+   Trage deine Tokens & Channel-ID ein.
 
-3. Container bauen & starten:
-
+3. **Docker verwenden (empfohlen)**  
    ```bash
-   docker-compose up --build -d
+   docker build -t steam-discord-bot .
+   docker run --env-file .env steam-discord-bot
    ```
 
----
+   Alternativ lokal:
+   ```bash
+   pip install -r requirements.txt
+   python bot.py
+   ```
 
-## ⚙️ Konfiguration
+## 💬 Verwendung
 
-Konfiguriere die `.env`-Datei:
+- `!linksteam <steam64_id>` – Verknüpft deinen Discord-Account mit deiner Steam64-ID
 
-| Variable           | Beschreibung                                           |
-|--------------------|--------------------------------------------------------|
-| `STEAM_API_KEY`    | Dein Steam Web API Key                                 |
-| `STEAM_ID`         | Steam64-ID des zu überwachenden Nutzers                |
-| `DISCORD_TOKEN`    | Discord Bot Token (mit Schreibrechten im Ziel-Channel) |
-| `DISCORD_CHANNEL_ID` | ID des Discord-Channels für Benachrichtigungen        |
-| `CHECK_INTERVAL`   | Abfrageintervall in Sekunden (Default: `60`)           |
-
----
-
-## ▶️ Verwendung
-Verwende den Befehl !linksteam, um deinen Discord-Account mit deinem Steam-Account zu verknüpfen.
-
-🔹 Befehl:
-diff
-Kopieren
-Bearbeiten
-!linksteam <steam64_id>
-🔹 Beispiel:
-diff
-Kopieren
-Bearbeiten
+Beispiel:
+```
 !linksteam 76561198012345678
-🔹 Was passiert danach?
-Deine Steam64-ID wird lokal gespeichert.
+```
 
-Der Bot prüft regelmäßig, ob du ein Spiel spielst.
+Der Bot wird automatisch regelmäßig prüfen, ob du ein Spiel spielst, und es im angegebenen Channel posten.
 
-Sobald du etwas spielst, wird automatisch eine Nachricht im konfigurierten Discord-Channel gepostet.
+## ❗ Hinweise
 
-💡 Die Steam64-ID ist eine lange Zahl (meist 17-stellig), die mit 765 beginnt. Du findest sie z. B. über https://steamid.io/.
+- Die Steam64-ID beginnt **immer mit `765`** und ist eine 17-stellige Zahl.
+- Der Bot benötigt mindestens `Send Messages`-Berechtigung im Channel.
+- Die Steam API hat Ratenbegrenzungen – also nicht zu oft pollen.
 
+## ✅ .env Beispiel
 
-
-
-- Sobald der Bot läuft, überprüft er alle `CHECK_INTERVAL` Sekunden den Spielstatus.
-- Erkennt er ein neues Spiel, sendet er eine Nachricht:
-
-  ```
-  🎮 Dein Freund spielt jetzt <Spielname>!
-  ```
-
----
-
-## 🐞 Troubleshooting
-
-- **Bot startet nicht?**  
-  - Prüfe, ob alle Umgebungsvariablen gesetzt sind.
-  - In Docker-Logs (`docker-compose logs`) siehst du Fehlermeldungen.
-
-- **Kein Eintrag im Channel?**  
-  - Stelle sicher, dass der Bot Schreibrechte hat.
-  - Überprüfe die `DISCORD_CHANNEL_ID`.
-
----
-
-## 📄 Lizenz
-
-MIT
+```env
+DISCORD_TOKEN=dein_token
+DISCORD_CHANNEL_ID=123456789012345678
+STEAM_API_KEY=dein_steam_api_key
+CHECK_INTERVAL=60
+```
