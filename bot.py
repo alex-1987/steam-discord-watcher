@@ -2,12 +2,15 @@ import os
 import asyncio
 import logging
 
+from dotenv import load_dotenv
 import aiohttp
 import discord
 from discord import Intents
 
-# ---- Konfiguration & Logging ----
+# ---- .env laden ----
+load_dotenv()
 
+# ---- Konfiguration & Logging ----
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s %(levelname)s %(message)s"
@@ -68,8 +71,11 @@ async def steam_watcher():
             current_game = await fetch_current_game(session)
 
             if current_game and current_game != last_game:
-                await channel.send(f"🎮 Dein Freund spielt jetzt **{current_game}**!")
-                log.info(f"Nachricht gesendet: {current_game}")
+                try:
+                    await channel.send(f"🎮 Dein Freund spielt jetzt **{current_game}**!")
+                    log.info(f"Nachricht gesendet: {current_game}")
+                except Exception as e:
+                    log.error(f"Fehler beim Senden der Nachricht: {e}")
                 last_game = current_game
             elif current_game is None:
                 # Fehlerfall, nichts tun
