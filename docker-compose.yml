@@ -1,0 +1,11 @@
+version: '3.9'
+
+services:
+  steam-discord-bot:
+    build: .
+    container_name: steam-discord-bot
+    env_file:
+      - .env
+    volumes:
+      - ./linked_users.json:/app/linked_users.json
+    restart: unless-stopped

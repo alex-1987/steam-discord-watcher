@@ -1,56 +1,51 @@
-# Steam Discord Dynamic Watcher
+# Steam Discord Bot
 
-Ein Discord-Bot, der automatisch überprüft, welche Discord-Nutzer aktuell ein Steam-Spiel spielen – basierend auf verknüpften Steam-IDs.
+Ein selbstgehosteter Discord-Bot, der anzeigt, wenn Discord-Nutzer, die sich mit ihrem Steam-Konto verknüpft haben, ein Spiel starten.
 
-## 🔧 Setup
+## Features
+- Nutzer können mit `!linksteam <Steam64ID>` ihren Steam-Account verknüpfen.
+- Der Bot überwacht den Spielstatus dieser Nutzer und postet automatisch in den Channel, in dem sie den Link gesetzt haben.
+- Docker- und Compose-fähig
+- Unterstützt mehrere Nutzer gleichzeitig
 
-1. **Repo klonen & in das Verzeichnis wechseln**  
-   ```bash
-   git clone <repo-url>
-   cd steam-discord-dynamic-watcher
-   ```
+## Setup
 
-2. **`.env` Datei erstellen**  
-   Kopiere die `.env.example`:
-   ```bash
-   cp .env.example .env
-   ```
-   Trage deine Tokens & Channel-ID ein.
+### Voraussetzungen
+- Docker & Docker Compose installiert
+- Discord Bot erstellt & Token bereit
+- Steam API Key
 
-3. **Docker verwenden (empfohlen)**  
-   ```bash
-   docker build -t steam-discord-bot .
-   docker run --env-file .env steam-discord-bot
-   ```
+### 1. `.env` Datei erstellen
+Kopiere `.env.example` zu `.env` und ergänze deine Daten:
 
-   Alternativ lokal:
-   ```bash
-   pip install -r requirements.txt
-   python bot.py
-   ```
-
-## 💬 Verwendung
-
-- `!linksteam <steam64_id>` – Verknüpft deinen Discord-Account mit deiner Steam64-ID
-
-Beispiel:
 ```
-!linksteam 76561198012345678
-```
-
-Der Bot wird automatisch regelmäßig prüfen, ob du ein Spiel spielst, und es im angegebenen Channel posten.
-
-## ❗ Hinweise
-
-- Die Steam64-ID beginnt **immer mit `765`** und ist eine 17-stellige Zahl.
-- Der Bot benötigt mindestens `Send Messages`-Berechtigung im Channel.
-- Die Steam API hat Ratenbegrenzungen – also nicht zu oft pollen.
-
-## ✅ .env Beispiel
-
-```env
-DISCORD_TOKEN=dein_token
-DISCORD_CHANNEL_ID=123456789012345678
+DISCORD_TOKEN=dein_discord_token
 STEAM_API_KEY=dein_steam_api_key
 CHECK_INTERVAL=60
 ```
+
+### 2. Container starten
+```bash
+docker-compose up --build -d
+```
+
+### 3. Bot verwenden
+In einem Discord-Channel:
+
+```bash
+!linksteam 7656119XXXXXXXXXX
+```
+
+Der Bot wird nun automatisch posten, wenn du ein Spiel startest.
+
+## Verknüpfung aufheben
+```bash
+!unlinksteam
+```
+
+## Sicherheit
+- API-Keys werden über Umgebungsvariablen aus `.env` gelesen
+- Die Datei `linked_users.json` speichert Verknüpfungen lokal
+
+## Lizenz
+MIT
