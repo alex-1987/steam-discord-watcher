@@ -77,6 +77,29 @@ Konfiguriere die `.env`-Datei:
 ---
 
 ## ▶️ Verwendung
+Verwende den Befehl !linksteam, um deinen Discord-Account mit deinem Steam-Account zu verknüpfen.
+
+🔹 Befehl:
+diff
+Kopieren
+Bearbeiten
+!linksteam <steam64_id>
+🔹 Beispiel:
+diff
+Kopieren
+Bearbeiten
+!linksteam 76561198012345678
+🔹 Was passiert danach?
+Deine Steam64-ID wird lokal gespeichert.
+
+Der Bot prüft regelmäßig, ob du ein Spiel spielst.
+
+Sobald du etwas spielst, wird automatisch eine Nachricht im konfigurierten Discord-Channel gepostet.
+
+💡 Die Steam64-ID ist eine lange Zahl (meist 17-stellig), die mit 765 beginnt. Du findest sie z. B. über https://steamid.io/.
+
+
+
 
 - Sobald der Bot läuft, überprüft er alle `CHECK_INTERVAL` Sekunden den Spielstatus.
 - Erkennt er ein neues Spiel, sendet er eine Nachricht:
