@@ -1,51 +1,47 @@
+
 # Steam Discord Bot
 
-Ein selbstgehosteter Discord-Bot, der anzeigt, wenn Discord-Nutzer, die sich mit ihrem Steam-Konto verknüpft haben, ein Spiel starten.
+Ein selbstgehosteter Discord-Bot, der regelmäßig überprüft, ob verknüpfte Steam-Nutzer ein Spiel spielen und das dann im jeweiligen Kanal meldet.
 
 ## Features
-- Nutzer können mit `!linksteam <Steam64ID>` ihren Steam-Account verknüpfen.
-- Der Bot überwacht den Spielstatus dieser Nutzer und postet automatisch in den Channel, in dem sie den Link gesetzt haben.
+
+- Jeder Nutzer kann sich selbst mit einer Steam-ID verknüpfen (`!linksteam`)
+- Kanalabhängige Benachrichtigungen
 - Docker- und Compose-fähig
-- Unterstützt mehrere Nutzer gleichzeitig
+- Fehlerbehandlung & Logging
+- Speicherung der Nutzer in `linked_users.json`
 
 ## Setup
 
-### Voraussetzungen
-- Docker & Docker Compose installiert
-- Discord Bot erstellt & Token bereit
-- Steam API Key
+1. Erstelle eine `.env` Datei basierend auf `.env.example`
+2. Trage deinen Bot-Token und deinen Steam API Key ein
+3. Starte den Bot mit Docker Compose
 
-### 1. `.env` Datei erstellen
-Kopiere `.env.example` zu `.env` und ergänze deine Daten:
-
+```bash
+docker compose up --build
 ```
-DISCORD_TOKEN=dein_discord_token
-STEAM_API_KEY=dein_steam_api_key
+
+## Befehle
+
+- `!linksteam <Steam64-ID>` – Verknüpft deinen Discord-Account mit einer Steam-ID
+- `!unlinksteam` – Entfernt die Verknüpfung
+
+## Steam64-ID finden
+
+- Gehe zu [steamid.io](https://steamid.io/)
+- Gib dein Steam-Profil ein
+- Kopiere die Steam64-ID (beginnt mit 765...)
+
+## Beispiel `.env`
+
+```env
+DISCORD_TOKEN=dein_token
+STEAM_API_KEY=dein_api_key
 CHECK_INTERVAL=60
 ```
 
-### 2. Container starten
-```bash
-docker-compose up --build -d
+## Beispielausgabe im Chat
+
 ```
-
-### 3. Bot verwenden
-In einem Discord-Channel:
-
-```bash
-!linksteam 7656119XXXXXXXXXX
+🎮 @Benutzer (SteamName) spielt jetzt Elden Ring!
 ```
-
-Der Bot wird nun automatisch posten, wenn du ein Spiel startest.
-
-## Verknüpfung aufheben
-```bash
-!unlinksteam
-```
-
-## Sicherheit
-- API-Keys werden über Umgebungsvariablen aus `.env` gelesen
-- Die Datei `linked_users.json` speichert Verknüpfungen lokal
-
-## Lizenz
-MIT
